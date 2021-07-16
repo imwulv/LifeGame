@@ -1,6 +1,7 @@
 package com.wulv;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -10,6 +11,7 @@ public class Main {
 
     private static void initPanel() {
         MyPanel p = new MyPanel();
+        p.setBackground(Color.DARK_GRAY);
         Thread panelThread = new Thread(p);
         JFrame frame = new JFrame();
         frame.add(p);
