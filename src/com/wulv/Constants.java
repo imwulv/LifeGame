@@ -1,5 +1,7 @@
 package com.wulv;
 
+import java.awt.*;
+
 public class Constants {
 
     //二维数组长度宽
@@ -12,5 +14,9 @@ public class Constants {
     public static final int WORLD_HEIGHT = HEIGHT_SIZE * SQUARE_SIZE;
     //随机生成存活细胞的个数
     public static final int LIFE_NUM = 1000000;
+
+    //细胞颜色
+    public static final Color DEAD_CELL = Color.BLACK;
+    public static final Color LIVING_CELL = Color.WHITE;
 
 }

@@ -15,3 +15,6 @@ SQUARE_SIZE
 ###随机生成存活细胞的个数
 LIFE_NUM
 
+###设置细胞颜色
+DEAD_CELL
+LIVING_CELL

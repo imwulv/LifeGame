@@ -15,45 +15,54 @@ public class MyPanel extends JPanel implements Runnable {
     static int[][] newMapList = new int[Constants.WIDTH_SIZE][Constants.HEIGHT_SIZE];
     public MyPanel() {
         super();
-
         this.setBackground(Color.DARK_GRAY);
     }
 
-
-    public static int worldTime = 0;
-
     @Override
     public void paint(Graphics g) {
+        //每次循环清空用于绘制的二维数组
         newMapList = new int[Constants.WIDTH_SIZE][Constants.HEIGHT_SIZE];
+        //循环原始数组
         for(int x = 1; x < orginMapList.length - 1; x++) {
             for(int y = 1; y < orginMapList[x].length - 1; y++) {
+                //计算周围活体细胞数量
                 int sum = orginMapList[x-1][y-1] + orginMapList[x][y-1]+orginMapList[x+1][y-1]
                         + orginMapList[x-1][y] + orginMapList[x+1][y]
                         + orginMapList[x-1][y+1] + orginMapList[x][y+1]+orginMapList[x+1][y+1];
                 //当前死亡
+                //死亡情况下，周围活体细胞数量为3，则在本位置繁殖一个新的细胞
                 if(orginMapList[x][y] == 0 && sum == 3){
+                    //注意，这里是更新往新的数组中，如果在原始数组中更新会有连锁反应，导致绘图结果和预期不一致
                     newMapList[x][y] = 1;
                 }
                 //当前存活
                 if(orginMapList[x][y] == 1){
+
+                    //当前位置周围活体细胞数量少于2时，孤独而死。
+                    //当前位置周围活体细胞数量大于3时，拥挤而死。
                     if( sum < 2 || sum > 3 ){
+                        //注意，这里是更新往新的数组中，如果在原始数组中更新会有连锁反应，导致绘图结果和预期不一致
                         newMapList[x][y] = 0;
+
+                        //因为是新的用于绘制的数组，所以正常活体细胞也要同步过去
                     } else {
+                        //注意，这里是更新往新的数组中，如果在原始数组中更新会有连锁反应，导致绘图结果和预期不一致
                         newMapList[x][y] = 1;
                     }
                 }
             }
         }
-
+        //将用于绘制的二维数组赋值给原始数组，方便下次计算，这语句也可以放在绘制方法之后，无影响。
         orginMapList = newMapList;
 
+        //绘制方法
         for(int x = 0; x < newMapList.length; x++) {
             for(int y = 0; y < newMapList[x].length; y++) {
                 if(newMapList[x][y] == 1){
-                    g.setColor(Color.WHITE);
+                    g.setColor(Constants.LIVING_CELL);
                 }
                 if(newMapList[x][y] == 0){
-                    g.setColor(Color.BLACK);
+                    g.setColor(Constants.DEAD_CELL);
                 }
                 g.fillRect(x * Constants.SQUARE_SIZE,y * Constants.SQUARE_SIZE,Constants.SQUARE_SIZE,Constants.SQUARE_SIZE);
             }
@@ -65,13 +74,14 @@ public class MyPanel extends JPanel implements Runnable {
      * 初始化二维数组
      */
     private void initOrginMapList(){
-//        //滑翔者
+        //滑翔者
         orginMapList[10][10] = 1;
         orginMapList[12][9] = 1;
         orginMapList[12][10] = 1;
         orginMapList[11][11] = 1;
         orginMapList[12][11] = 1;
 
+        //随机生成活体细胞 要用时放开即可
 //        for (int i = 0 ; i < Constants.LIFE_NUM; i ++){
 //            int widthMax=Constants.WIDTH_SIZE,heightMax=Constants.HEIGHT_SIZE,min=1;
 //            int x = (int) (Math.random()*(widthMax-min)+min);
@@ -87,9 +97,7 @@ public class MyPanel extends JPanel implements Runnable {
     final TimerTask mainTask = new TimerTask() {
         @Override
         public void run() {
-
             MyPanel.this.repaint();
-            worldTime++;
         }
     };
 
@@ -97,8 +105,6 @@ public class MyPanel extends JPanel implements Runnable {
     public void run() {
         initOrginMapList();
         ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
-
         pool.scheduleAtFixedRate(mainTask, 0 , 100, TimeUnit.MILLISECONDS);
-        //timer.schedule(new MyTimerTask(), 0, 10);
     }
 }
