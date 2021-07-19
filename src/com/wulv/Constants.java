@@ -5,8 +5,8 @@ import java.awt.*;
 public class Constants {
 
     //二维数组长度宽
-    public static final int WIDTH_SIZE = 1024;
-    public static final int HEIGHT_SIZE = 1024;
+    public static final int WIDTH_SIZE = 500;
+    public static final int HEIGHT_SIZE = 500;
     //控制绘制的细胞大小
     public static final int SQUARE_SIZE = 5;
     //根据二维数组自动调整窗口大小

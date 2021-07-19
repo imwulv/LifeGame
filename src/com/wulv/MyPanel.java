@@ -12,6 +12,7 @@ public class MyPanel extends JPanel implements Runnable {
     private static int[][] orginMapList = new int[Constants.WIDTH_SIZE][Constants.HEIGHT_SIZE];
     //用于绘制的缓存数组
     private static int[][] newMapList = new int[Constants.WIDTH_SIZE][Constants.HEIGHT_SIZE];
+    public static boolean switchFlag = Boolean.TRUE;
 
     @Override
     public void paint(Graphics g) {
@@ -76,13 +77,9 @@ public class MyPanel extends JPanel implements Runnable {
      * 初始化二维数组
      */
     private void initOrginMapList(){
-        //滑翔者
-        orginMapList[10][10] = 1;
-        orginMapList[12][9] = 1;
-        orginMapList[12][10] = 1;
-        orginMapList[11][11] = 1;
-        orginMapList[12][11] = 1;
 
+        //修改文件名获取细胞排列
+        CellFactory.setCellListByFileName("factory.cells",orginMapList);
         //随机生成活体细胞 要用时放开即可
 //        for (int i = 0 ; i < Constants.LIFE_NUM; i ++){
 //            int widthMax=Constants.WIDTH_SIZE,heightMax=Constants.HEIGHT_SIZE,min=1;
@@ -100,7 +97,9 @@ public class MyPanel extends JPanel implements Runnable {
     private final TimerTask mainTask = new TimerTask() {
         @Override
         public void run() {
-            MyPanel.this.repaint();
+            while (switchFlag){
+                MyPanel.this.repaint();
+            }
         }
     };
 
@@ -108,6 +107,6 @@ public class MyPanel extends JPanel implements Runnable {
     public void run() {
         initOrginMapList();
         ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
-        pool.scheduleAtFixedRate(mainTask, 0 , 100, TimeUnit.MILLISECONDS);
+        pool.scheduleAtFixedRate(mainTask, 0 , 10, TimeUnit.MILLISECONDS);
     }
 }
